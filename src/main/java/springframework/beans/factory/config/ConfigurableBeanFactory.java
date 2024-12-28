@@ -1,7 +1,7 @@
 package springframework.beans.factory.config;
 
 import springframework.beans.factory.BeanFactory;
-import springframework.beans.factory.support.HierarchicalBeanFactory;
+import springframework.beans.factory.HierarchicalBeanFactory;
 
 /**
  * @className: ConfigurableBeanFactory
@@ -10,7 +10,7 @@ import springframework.beans.factory.support.HierarchicalBeanFactory;
  * @Version: 1.0
  * @description:
  */
-public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry {
+public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry, BeanFactory {
 
 
     /**
