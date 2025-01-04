@@ -1,5 +1,10 @@
 package springframework.beans;
 
+import springframework.beans.factory.DisposableBean;
+import springframework.beans.factory.InitializingBean;
+
+import java.util.Set;
+
 /**
  * @className: Person
  * @author: zhangguowei
@@ -7,7 +12,7 @@ package springframework.beans;
  * @Version: 1.0
  * @description:
  */
-public class Person {
+public class Person implements InitializingBean, DisposableBean {
 
     private String name;
 
@@ -23,6 +28,7 @@ public class Person {
                 ", car=" + car +
                 '}';
     }
+
 
     public String getName() {
         return name;
@@ -46,5 +52,24 @@ public class Person {
 
     public void setCar(Car car) {
         this.car = car;
+    }
+
+    public void customInitMethod(){
+        System.out.println("I was born in the method named customInitMethod");
+    }
+
+    public void customDestroyMethod(){
+        System.out.println("I was born in the method named customDestroyMethod");
+    }
+
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("I was born in the method named destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("I was born in the method named afterPropertiesSet");
     }
 }
