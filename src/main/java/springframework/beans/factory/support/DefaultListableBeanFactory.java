@@ -4,7 +4,6 @@ import springframework.BeansException;
 import springframework.beans.factory.ConfigurableListableBeanFactory;
 import springframework.beans.factory.config.BeanDefinition;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 

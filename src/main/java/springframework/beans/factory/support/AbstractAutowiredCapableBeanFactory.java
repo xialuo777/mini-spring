@@ -5,6 +5,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import springframework.BeansException;
 import springframework.PropertyValue;
+import springframework.beans.factory.BeanFactoryAware;
 import springframework.beans.factory.DisposableBean;
 import springframework.beans.factory.InitializingBean;
 import springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -49,8 +50,9 @@ public class AbstractAutowiredCapableBeanFactory extends AbstractBeanFactory imp
         
         //注册有销毁方法的bean
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
-        
-        addSingleton(beanName, bean);
+        if (beanDefinition.isSingleton()){
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
 
@@ -63,12 +65,19 @@ public class AbstractAutowiredCapableBeanFactory extends AbstractBeanFactory imp
      * @return
      **/
     private void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
-        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())){
-            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+        //只有singleton类型bean会执行销毁方法
+        if (beanDefinition.isSingleton()){
+            if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())){
+                registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+            }
         }
     }
 
     protected Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof BeanFactoryAware){
+            ((BeanFactoryAware)bean).setBeanFactory(this);
+        }
+
         //执行BeanPostProcessor的前置处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 
